@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cupd=$(checkupdates | wc -l)
+echo "<fc=#d4bfff><fn=2></fn>  $cupd</fc>"

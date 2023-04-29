@@ -8,6 +8,7 @@ ICON=""
 CHAR_COLOR="#5DADE2"
 FULL_COLOR="#27AE60"
 DIS_COLOR="#F8C471"
+COLOR="#27AE60"
 
 case $STATUS in
 
@@ -91,4 +92,4 @@ case $STATUS in
 
 esac
 
-echo "<fc=$COLOR><fn=1>$ICON</fn></fc>"
+echo "<fc=$COLOR><fn=6>$ICON</fn></fc>"

@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -euo pipefail
+
+DMENU="dmenu -i -h -30 -l 10 -p"
+
+main() {
+  declare -A _ips
+
+  _external=$(dig +short myip.opendns.com @resolver1.opendns.com)
+  _ips[external]="${_external}"
+
+  for _iface in $(ip -4 -j addr | jq -r '.[] |{ name: .ifname, ip: .addr_info[].local} | join(":")'); do
+    _ips[${_iface%:*}]="${_iface##*:}"
+  done
+
+  selected="$(printf '%s\n' "${!_ips[@]}" | ${DMENU} "ips:" "$@")"
+  [ -z "${selected}" ] && exit 1
+  echo "${_ips["${selected}"]}" | cp2cb
+  notify-send "IP (in clipboard)" " ${selected}: ${_ips["${selected}"]}"
+}
+
+[[ "${BASH_SOURCE[0]}" == "${0}" ]] && main "$@"

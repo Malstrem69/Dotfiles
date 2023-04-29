@@ -12,6 +12,7 @@ function run {
 
 # Cursor active at boot
 xsetroot -cursor_name left_ptr &
+xinput set-prop 17 333 1
 prime-offload
 # Disable FN function
 # echo 0 | sudo tee -a /sys/module/hid_apple/parameters/fnmode &

@@ -68,6 +68,9 @@ myTerminal = "alacritty"        -- Default terminal
 myDmenu :: String
 myDmenu = "dmenu_run -h 26 -bw 2 -W 1000 -l 10 -p Run:" -- Dmenu
 
+myDmhub :: String
+myDmhub = "~/.config/dmenu/dmenu_scripts/dm_menu.sh"
+
 myModMask :: KeyMask
 myModMask = mod4Mask            -- Super Key (--mod4Mask= super key --mod1Mask= alt key --controlMask= ctrl key --shiftMask= shift key)
 
@@ -208,6 +211,7 @@ treeselectAction a = TS.treeselectAction a
   , Node (TS.TSNode "Network" "" (return ()))
     [ Node (TS.TSNode "Postman" "" (spawn "postman")) []
     , Node (TS.TSNode "Wireshark" "" (spawn "wireshark")) []
+    , Node (TS.TSNode "Fragments" "" (spawn "fragments")) []
     ]
   , Node (TS.TSNode "Graphics" "" (return()))
     [ Node (TS.TSNode "Pinta" "" (spawn "pinta")) []
@@ -237,16 +241,17 @@ myKeys =
       , ("M-S-q", io exitSuccess)                                                                  -- Quits xmonad
 
     -- System Volume (PulseAudio)
-      , ("<XF86AudioRaiseVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ +10%")              -- Volume Up
-      , ("<XF86AudioLowerVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ -10%")              -- Volume Down
-      , ("<XF86AudioMute>", spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")                     -- Mute
+      , ("<XF86AudioRaiseVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ +10% && ~/.config/xmonad/scripts/sound_dunst.sh")              -- Volume Up
+      , ("<XF86AudioLowerVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ -10% && ~/.config/xmonad/scripts/sound_dunst.sh")              -- Volume Down
+      , ("<XF86AudioMute>", spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")                                                                -- Mute
 
     -- TreeSelect
       , ("M1-m", treeselectAction tsDefaultConfig)
 
     -- Run Prompt
       , ("M-S-<Return>", spawn (myDmenu))                                                          -- Run Dmenu
-      , ("M-p h", spawn "dm-hub")
+    --  , ("M-p h", spawn (myDmhub))
+      , ("M-p h", spawn "~/.config/dmenu/dmenu_scripts/dm_menu.sh")
 
     -- Apps
       , ("M-b", spawn "google-chrome-stable")                                                      -- Google-chrome
@@ -289,8 +294,8 @@ myKeys =
       , ("M1-<Up>", sendMessage MirrorExpand)                                       -- Expand vert window width
 
     -- Brightness Display 1
-      , ("<XF86MonBrightnessUp>", spawn "xbacklight -inc 10")                       -- Brightness up
-      , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 10")                     -- Brightness down
+      , ("<XF86MonBrightnessUp>", spawn "xbacklight -inc 5 && ~/.config/xmonad/scripts/brightness_dunst.sh")                       -- Brightness up
+      , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 5 && ~/.config/xmonad/scripts/brightness_dunst.sh")                     -- Brightness down
 
     -- Brightness Display 2
       , ("M1-<F1>", spawn "sh $HOME/.xmonad/scripts/brightness.sh + HDMI-A-1")      -- Night Mode

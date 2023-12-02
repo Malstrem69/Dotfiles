@@ -89,3 +89,23 @@
 ;;(use-package doom-modeline-mode
 
 (beacon-mode 1)
+;;(setq exec-path (append exec-path '("/home/kenaya/.config/miniconda3/")))
+;;(setq conda-env-home-directory (expand-file-name "/home/kenaya/.config/miniconda3/"))
+(require 'org-bullets)(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+(use-package org-auto-tangle
+  :defer t
+  :hook (org-mode . org-auto-tangle-mode)
+  :config
+  (setq org-auto-tangle-default t))
+;;:load-path "site-lisp/org-auto-tangle/"    ;; this line is necessary only if you cloned the repo in your site-lisp directory
+
+(setq doom-font (font-spec :family "JetBrains Mono" :size 15)
+      doom-variable-pitch-font (font-spec :family "Ubuntu" :size 15)
+      doom-big-font (font-spec :family "JetBrains Mono" :size 24))
+(after! doom-themes
+  (setq doom-themes-enable-bold t
+        doom-themes-enable-italic t))
+(custom-set-faces!
+  '(font-lock-comment-face :slant italic)
+  '(font-lock-keyword-face :slant italic))

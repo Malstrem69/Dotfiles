@@ -36,7 +36,7 @@
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        ;;hydra
        indent-guides     ; highlighted indent columns
-       ;;ligatures         ; ligatures and symbols to make your code pretty again
+       ligatures         ; ligatures and symbols to make your code pretty again
        ;;minimap           ; show a map of the code on the side
        modeline          ; snazzy, Atom-inspired modeline, plus API
        ;;nav-flash         ; blink cursor line after big motions
@@ -85,7 +85,7 @@
        ;;grammar           ; tasing grammar mistake every you make
 
        :tools
-       ansible
+       ;;ansible
        ;;biblio            ; Writes a PhD for you (citation needed)
        ;;debugger          ; FIXME stepping through code, to help you add bugs
        ;;direnv
@@ -103,7 +103,7 @@
        ;;prodigy           ; FIXME managing external services & code builders
        ;;rgb               ; creating color strings
        ;;taskrunner        ; taskrunner for all your projects
-       terraform         ; infrastructure as code
+       ;;terraform         ; infrastructure as code
        ;;tmux              ; an API for interacting with tmux
        ;;tree-sitter       ; syntax and parsing, sitting in a tree...
        ;;upload            ; map local to remote projects via ssh/ftp
@@ -117,7 +117,7 @@
        ;;beancount         ; mind the GAAP
        ;;(cc +lsp)         ; C > C++ == 1
        ;;clojure           ; java with a lisp
-       common-lisp       ; if you've seen one lisp, you've seen them all
+       ;;common-lisp       ; if you've seen one lisp, you've seen them all
        ;;coq               ; proofs-as-programs
        ;;crystal           ; ruby at the speed of c
        ;;csharp            ; unity, .NET, and mono shenanigans
@@ -137,7 +137,7 @@
        ;;gdscript          ; the language you waited for
        (go +lsp)         ; the hipster dialect
        ;;(graphql +lsp)    ; Give queries a REST
-       ;;(haskell +lsp)    ; a language that's lazier than I am
+       (haskell +lsp)    ; a language that's lazier than I am
        ;;hy                ; readability of scheme w/ speed of python
        ;;idris             ; a language you can depend on
        json              ; At least it ain't XML
@@ -149,7 +149,7 @@
        ;;lean              ; for folks with too much to prove
        ;;ledger            ; be audit you can be
        ;;lua               ; one-based indices? one-based indices
-       markdown          ; writing docs for people to ignore
+       ;;markdown          ; writing docs for people to ignore
        ;;nim               ; python + lisp at the speed of c
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
@@ -159,6 +159,7 @@
        ;;purescript        ; javascript, but functional
        (python             ; beautiful is better than ugly
         +lsp
+        +conda
         +pyright)
        ;;qt                ; the 'cutest' gui framework ever
        ;;racket            ; a DSL for DSLs

@@ -10,7 +10,7 @@ env:
   # each instance of Alacritty. If it is not present, alacritty will
   # check the local terminfo database and use `alacritty` if it is
   # available, otherwise `xterm-256color` is used.
-  TERM: alacritty
+  TERM: xterm-256color
   LANG: "en_US.UTF-8"
   LC_CTYPE: en_US.UTF-8
 
@@ -38,7 +38,7 @@ window:
     x: 6
     y: 6
   # Spread additional padding evenly around the terminal content.
-  dynamic_padding: false
+  dynamic_padding: true
   # Window decorations
   #
   # Values for `decorations`:

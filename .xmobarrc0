@@ -4,12 +4,21 @@
 -- Font Awesome 4 otf https://aur.archlinux.org/packages/otf-font-awesome-4/
 -- Font Awesome 4 ttf https://aur.archlinux.org/packages/ttf-font-awesome-4/
 
-Config { font    = "xft:Ubuntu:weight=bold:pixelsize=13:antialias=true:hinting=true"
-       , additionalFonts = [ "xft:MesloLGS NF:weight=regular:pixelsize=13"
-                           , "xft:Font Awesome 5 Free Solid:pixelsize=13"           -- bar sound status signs
-                           , "xft:Font Awesome 5 Free Regular:pixelsize=13"         -- Tiling
-                           , "xft:MesloLGS NF:weight=regular:pixelsize=18"          -- wi-fi size correction
-                           , "xft:MesloLGS NF:weight=regular:pixelsize=16"          -- bluetooth icon size
+-- Config { font    = "xft:Ubuntu:weight=bold:pixelsize=13:antialias=true:hinting=true"
+--        , additionalFonts = [ "xft:MesloLGS NF:weight=regular:pixelsize=13"
+--                            , "xft:Font Awesome 5 Free Solid:pixelsize=13"           -- bar sound status signs
+--                            , "xft:Font Awesome 5 Free Regular:pixelsize=13"         -- Tiling
+--                            , "xft:MesloLGS NF:weight=regular:pixelsize=18"          -- wi-fi size correction
+--                            , "xft:MesloLGS NF:weight=regular:pixelsize=16"          -- bluetooth icon size
+--                            ]
+--
+Config { font = "Ubuntu Bold 10"
+       , additionalFonts = [ "xft:MesloLGS NF Regular 11"
+                           , "xft:Font Awesome 5 Free Solid 11"           -- bar sound status signs
+                           , "xft:Font Awesome 5 Free Regular 10"         -- Tiling
+                           , "xft:MesloLGS NF Regular 14"                 -- wi-fi size correction
+                           , "xft:MesloLGS NF Regular 12"                 -- bluetooth icon size
+                           , "xft:MesloLGS NF Regular 10"                 -- battery icon size
                            ]
        , bgColor = "#212733"
        , fgColor = "#ff6c6b"

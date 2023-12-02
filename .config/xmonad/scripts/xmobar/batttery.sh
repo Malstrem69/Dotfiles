@@ -1,9 +1,12 @@
 #!/bin/bash
 
+# ACPI_STATUS=($(acpi -b | awk '{print substr($3, 0, length($3)-1)}'))
+# ACPI_POWERLEVEL=($(acpi -b | awk '{print substr($4, 0, length($4)-2)}'))
+
 #That script using "acpi" metrics to display power information
-STATUS=($(acpi | awk '{print substr($3, 0, length($3)-1)}'))
+STATUS=($(cat /sys/class/power_supply/BAT1/status))
 # Discharging Full Charging
-POWERLEVEL=($(acpi | awk '{print substr($4, 0, length($4)-2)}'))
+POWERLEVEL=($(cat /sys/class/power_supply/BAT1/capacity))
 ICON=""
 CHAR_COLOR="#5DADE2"
 FULL_COLOR="#27AE60"

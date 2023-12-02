@@ -50,3 +50,5 @@
 ;(unpin! t)
 
 (package! beacon)
+(package! org-bullets)
+(package! org-auto-tangle)

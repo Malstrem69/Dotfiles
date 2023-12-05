@@ -16,5 +16,5 @@
     - "optimus-manager" with config update to suport ly \
     *NOTE: Optimus-manager is not supporting Ly login manager and you need to configure it by yourself. You need to update it in config script.*
     path -> /usr/lib/python3.11/site-packages/optimus-manager/session.py \
-    find function *for cmd in* and add "systemctl restart ly.service" \
+    find function *for cmd in* and add "systemctl restart ly.service" 
  

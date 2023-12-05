@@ -124,7 +124,7 @@ source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 ## Exports
-# export PATH=$HOME/.emacs.d/bin:$PATH
+export PATH=$HOME/.emacs.d/bin:$PATH
 
-# export GOPATH=$HOME/.config/go
-# export PATH=$PATH:$GOPATH/bin
+export GOPATH=$HOME/.config/go
+export PATH=$PATH:$GOPATH/bin

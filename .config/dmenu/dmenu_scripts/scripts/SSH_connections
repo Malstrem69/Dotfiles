@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -euo pipefail
+
+DMENU="dmenu -g 1 -l 10 -Y 400 -W 500 -X 700 -p"
+
+file_path="$HOME/.ssh/config"
+
+if [ ! -f "$file_path" ]; then
+    echo "SSH config file do not exists"
+    sleep 1
+fi
+
+main () {
+    choise_list=$(sed -n -e '/^Host/p' "$file_path" | awk '{print $2}')
+    choise=$( printf '%s\n' "${choise_list[@]}" | sort | ${DMENU} 'SSH connection: "$@"')
+
+    if [ "$choise" ]; then
+        exec alacritty -e ssh "$choise"
+    else
+        echo "Program terminated." && exit 0
+    fi
+}
+
+[[ "${BASH_SOURCE[0]}" == "${0}" ]] && main "$@"

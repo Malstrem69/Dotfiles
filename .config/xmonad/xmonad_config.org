@@ -40,7 +40,6 @@ import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat, isDialog, doCenter
 -- Treeselect
 import Data.Tree
 import qualified XMonad.Actions.TreeSelect as TS
-import qualified XMonad.StackSet as W
 -- Layouts
 import XMonad.Layout.GridVariants (Grid(Grid))
 import XMonad.Layout.ResizableTile
@@ -83,7 +82,7 @@ myDmenu :: String
 myDmenu = "dmenu_run -h 26 -bw 2 -W 1000 -l 10 -p Run:" -- Dmenu
 
 myDmhub :: String
-myDmhub = "~/.config/dmenu/dmenu_scripts/dm_menu.sh"
+myDmhub = "~/.config/dmenu/dmenu_scripts/dm_menu.sh"  -- Path to dmenu helper scripts menu bar
 
 myModMask :: KeyMask
 myModMask = mod4Mask -- Super Key (--mod4Mask= super key --mod1Mask= alt key --controlMask= ctrl key --shiftMask= shift key)
@@ -293,8 +292,7 @@ myKeys =
 
     -- Run Prompt
       , ("M-S-<Return>", spawn (myDmenu))                                                          -- Run Dmenu
-    --  , ("M-p h", spawn (myDmhub))
-      , ("M-p h", spawn "~/.config/dmenu/dmenu_scripts/dm_menu.sh")
+      , ("M-p h", spawn (myDmhub))
 
     -- Apps
       , ("M-b", spawn "google-chrome-stable")                                                      -- Google-chrome

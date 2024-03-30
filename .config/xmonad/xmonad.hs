@@ -17,7 +17,7 @@ import Data.Monoid
 import Data.Maybe (fromJust, isJust)
 import qualified Data.Map as M
 -- Hooks
-import XMonad.Hooks.DynamicProperty
+import XMonad.Hooks.OnPropertyChange
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks (avoidStruts, docksEventHook, manageDocks, ToggleStruts(..))
@@ -46,7 +46,7 @@ import qualified XMonad.Layout.MultiToggle as MT (Toggle(..))
 import XMonad.Util.Dmenu
 import XMonad.Util.EZConfig(additionalKeysP)
 import XMonad.Util.NamedScratchpad
-import XMonad.Util.Scratchpad
+-- import XMonad.Util.Scratchpad
 import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
 import XMonad.Util.SpawnOnce
 import Graphics.X11.ExtraTypes.XF86
@@ -148,11 +148,11 @@ windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace
 myScratchPads :: [NamedScratchpad]
 myScratchPads =
   [
-      NS "nemo"                 "nemo"                 (className =? "nemo")                    (customFloating $ W.RationalRect 0.15 0.15 0.7 0.7)
-    , NS "terminal"             launchTerminal         (title =? "scratchpad")                  (customFloating $ W.RationalRect 0.15 0.15 0.7 0.7)
+      NS "cmus"                 launchCmus             (title =? "cmus")                    (customFloating $ W.RationalRect 0.15 0.15 0.7 0.7) ,
+      NS "terminal"             launchTerminal         (title =? "scratchpad")              (customFloating $ W.RationalRect 0.15 0.15 0.7 0.7)
   ]
   where
-    launchMocp     = myTerminal ++ " -t ncmpcpp -e ncmpcpp"
+    launchCmus     = myTerminal ++ " -t cmus -e cmus"
     launchTerminal = myTerminal ++ " -t scratchpad"
 
 -------------------------------------------------------------------------
@@ -197,8 +197,12 @@ treeselectAction a = TS.treeselectAction a
     [ Node (TS.TSNode "Nemo" "" (spawn "nemo")) []
     , Node (TS.TSNode "Baobab" "Disc capacity" (spawn "baobab")) []
     ]
+  , Node (TS.TSNode "Palyers" "" (return()))
+    [ Node (TS.TSNode "Cmus" "mp3 player" (spawn "alacritty -e cmus")) []
+    ]
   , Node (TS.TSNode "Tools" "" (return()))
     [ Node (TS.TSNode "Obsidian" "" (spawn "obsidian")) []
+    , Node (TS.TSNode "Qgis" "" (spawn "qgis")) []
     ]
   , Node (TS.TSNode "Github" "" (return()))
     [ Node (TS.TSNode "Meld" "Conflicts" (spawn "meld")) []
@@ -297,7 +301,7 @@ myKeys =
       , ("M1-S-<F1>", spawn "sh $HOME/.xmonad/scripts/brightness.sh = HDMI-A-1")    -- Reset redshift light
 
     -- Scratchpad windows
-      , ("M-m", namedScratchpadAction myScratchPads "ncmpcpp")                      -- Ncmpcpp Player
+      , ("M-m", namedScratchpadAction myScratchPads "cmus")                         -- Cmus Player
       , ("M-o", namedScratchpadAction myScratchPads "spotify")                      -- Spotify
       , ("M-a", namedScratchpadAction myScratchPads "nautilus")                     -- Nautilus
       , ("M-d", namedScratchpadAction myScratchPads "discord")                      -- Discord

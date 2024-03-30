@@ -9,7 +9,7 @@ TERM = "alacritty"
 decorations     = "None"
 dynamic_padding = false
 dynamic_title   = true
-opacity         = 0.9
+opacity         = 0.8
 startup_mode    = "Maximized"
 title           = "Alacritty"
 
@@ -54,8 +54,8 @@ family = "Ubuntu Mono"
 style  = "Bold Italic"
 
 [colors.primary]
-background = "#090300"
-foreground = "#a5a2a2"
+# background = "#090300"
+# foreground = "#a5a2a2"
 
 [colors.cursor]
 cursor = "CellForeground"

@@ -17,7 +17,5 @@ else [[ $STATES = "(disconnected)" ]]
 fi
 
 
-echo "<fc=$COLOR><fn=4>$ICON</fn></fc>"
-#echo "<fc=$COLOR><fn=1>$ICON</fn> $WIFINAME </fc>"
-
-
+# echo "<fc=$COLOR><fn=4>$ICON</fn></fc>"
+echo "<fc=$COLOR><fn=1>$ICON</fn> $WIFINAME </fc>"

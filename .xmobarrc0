@@ -111,9 +111,9 @@ Config { font = "Ubuntu Bold 10"
        \   \
        -- \<fc=#212733> | </fc>  <fc=#95e6cb> <fn=2></fn> %default:Master% </fc> \
        -- \<fc=#212733> | </fc>  %date% <fc=#212733> | | </fc>"
-       \%bt%\
-       \   \
        \%weifei%\
+       \   \
+       \%bt%\
        \   \
        \%volume%\
        \   \

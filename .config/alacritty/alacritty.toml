@@ -132,14 +132,19 @@ shape = "Block"
 blinking = "On"
 
 [[keyboard.bindings]]
+action = "ToggleViMode"
+key    = "Space"
+mods   = "Alt|Shift"
+
+[[keyboard.bindings]]
 action = "Paste"
 key    = "V"
-mods   = "Control|Shift"
+mods   = "Alt|Shift"
 
 [[keyboard.bindings]]
 action = "Copy"
 key    = "C"
-mods   = "Control|Shift"
+mods   = "Alt|Shift"
 
 [[keyboard.bindings]]
 action = "ScrollPageUp"

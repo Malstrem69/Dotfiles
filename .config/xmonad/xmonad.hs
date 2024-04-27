@@ -3,7 +3,7 @@
 
 -- Main
 import XMonad
-import System.IO (hPutStrLn)
+import System.IO (hPutStrLn, hPutStr, hClose)
 import System.Exit
 import qualified XMonad.StackSet as W
 -- Actions
@@ -12,8 +12,9 @@ import XMonad.Actions.MouseResize
 import XMonad.Actions.WithAll (sinkAll, killAll)
 import XMonad.Actions.CopyWindow (kill1)
 -- Data
-import Data.Semigroup
+import Data.Char (toUpper)
 import Data.Monoid
+import Data.Semigroup
 import Data.Maybe (fromJust, isJust)
 import qualified Data.Map as M
 -- Hooks
@@ -44,7 +45,8 @@ import qualified XMonad.Layout.ToggleLayouts as T (toggleLayouts, ToggleLayout(T
 import qualified XMonad.Layout.MultiToggle as MT (Toggle(..))
 -- Utilities
 import XMonad.Util.Dmenu
-import XMonad.Util.EZConfig(additionalKeysP)
+import XMonad.Util.NamedActions
+import XMonad.Util.EZConfig
 import XMonad.Util.NamedScratchpad
 -- import XMonad.Util.Scratchpad
 import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
@@ -228,99 +230,105 @@ treeselectAction a = TS.treeselectAction a
     ]
   ]
 
+------------------------------------------------------
+-- My Custom functions
+------------------------------------------------------
+
+-- Those functions are for keymap
+subtitle' ::  String -> ((KeyMask, KeySym), NamedAction)
+subtitle' x = ((0,0), NamedAction $ map toUpper
+                      $ sep ++ "\n-- " ++ x ++ " --\n" ++ sep)
+  where
+    sep = replicate (16 + length x) '-'
+
+showKeybindings :: [((KeyMask, KeySym), NamedAction)] -> NamedAction
+showKeybindings x = addName "Show Keybindings" $ io $ do
+  h <- spawnPipe $ "yad --text-info --fontname=\"SauceCodePro Nerd Font Mono 12\" --fore=#46d9ff back=#282c36 --center --geometry=1200x800 --title \"XMonad keybindings\""
+  hPutStr h (unlines $ showKmSimple x) -- showKmSimple doesn't add ">>" to subtitles
+  hClose h
+  return ()
+
 ------------------------------------------------------------------------
 -- Custom Keys
 -- use "xev" utility in terminal to get keycodes
 ------------------------------------------------------------------------
-myKeys :: [(String, X ())]
-myKeys =
-    [
-    -- Xmonad
-        ("M-<KP_Multiply>", spawn "xmonad --recompile && xmonad --restart")                        -- Recompile & Restarts xmonad
-      , ("M-S-q", io exitSuccess)                                                                  -- Quits xmonad
+myKeys :: XConfig l0 -> [((KeyMask, KeySym), NamedAction)]
+myKeys c =
+    -- (subtitle "Custom Keys":) $ mkNamedKeymap c $
+    let subKeys str ks = subtitle' str : mkNamedKeymap c ks in
+    subKeys "Xmonad Essentials"
+    [ ("M-<KP_Multiply>",      addName "Restart & recompile xmonad"   $ spawn "xmonad --recompile && xmonad --restart")
+    , ("M1-m",                 addName "Tree menu"                    $ treeselectAction tsDefaultConfig)
+    , ("M-q",                  addName "Close focused app"            $ kill1)
+    , ("M-<Escape>",           addName "Toggle xkill mode"            $ spawn "xkill")
+    , ("M-S-w",                addName "Close all apps on workspace"  $ killAll)
+    , ("M-S-q",                addName "Quit xmonad"                  $ io exitSuccess)
+    ]
 
-    -- System Volume (PulseAudio)
-      , ("<XF86AudioRaiseVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ +10% && ~/.config/xmonad/scripts/sound_dunst.sh")              -- Volume Up
-      , ("<XF86AudioLowerVolume>", spawn "pactl set-sink-volume @DEFAULT_SINK@ -10% && ~/.config/xmonad/scripts/sound_dunst.sh")              -- Volume Down
-      , ("<XF86AudioMute>", spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")                                                                -- Mute
+    ^++^ subKeys "System Volume (PulseAudio)" -- System Volume (PulseAudio)
+    [ ("<XF86AudioRaiseVolume>", addName "Volume Up"      $ spawn "pactl set-sink-volume @DEFAULT_SINK@ +10% && ~/.config/xmonad/scripts/sound_dunst.sh")
+    , ("<XF86AudioLowerVolume>", addName "Volume Down"    $ spawn "pactl set-sink-volume @DEFAULT_SINK@ -10% && ~/.config/xmonad/scripts/sound_dunst.sh")
+    , ("<XF86AudioMute>",        addName "Volume Mute"    $ spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle")
+    ]
 
-    -- TreeSelect
-      , ("M1-m", treeselectAction tsDefaultConfig)
+    ^++^ subKeys "Dmenu actions"  -- Run Prompt
+    [ ("M-S-<Return>",           addName "Spawn dmenu"           $ spawn (myDmenu))
+    , ("M-p h",                  addName "Spawn Dmenu Hub"       $ spawn (myDmhub))
+    ]
 
-    -- Run Prompt
-      , ("M-S-<Return>", spawn (myDmenu))                                                          -- Run Dmenu
-      , ("M-p h", spawn (myDmhub))
+    ^++^ subKeys "App Hotkeys"  -- Apps
+    [ ("M-b",                    addName "Spawn browser"         $ spawn "google-chrome-stable")
+    , ("M-e e",                  addName "Emacs"                 $ spawn (myEmacs))
+    , ("<Print>",                addName "ScreenShot"            $ spawn "flameshot gui")
+    , ("M-<Return>",             addName "Spawn Terminal"        $ spawn (myTerminal))
+    ]
 
-    -- Apps
-      , ("M-b", spawn "google-chrome-stable")                                                      -- Google-chrome
-      , ("M-<Return>", spawn (myTerminal))                                                         -- Terminal
+    ^++^ subKeys "Windows navigation"  -- Windows navigation
+    [ ("M-<Space>",              addName "Rotate through the layout"          $ sendMessage NextLayout)
+    , ("M1-f",                   addName "Toggle full width"                  $ sendMessage (MT.Toggle NBFULL) >> sendMessage ToggleStruts)
+    , ("M1-s",                   addName "All windows back to tiliong"        $ sinkAll)
+    , ("M1-S-p>",                addName "Focused window back to tiling"      $ withFocused $ windows . W.sink)
+    , ("M1-t",                   addName "Toggle my 'floats' layout"          $ sendMessage (T.Toggle "floats"))
+    , ("M-<Left>",               addName "Swap focused window with master"    $ windows W.swapMaster)
+    , ("M-<Up>",                 addName "Swap focused with previous"         $ windows W.swapUp)
+    , ("M-<Down>",               addName "Swap focused with the next"         $ windows W.swapDown)
+    ]
 
-    -- Flameshot
-      , ("<Print>", spawn "flameshot gui")                                                         -- Flameshot GUI (screenshot)
+    ^++^ subKeys "Workspaces"  -- Workspaces
+    [ ("M-.",                    addName "Focus next monitor"                 $ nextScreen)
+    , ("M-,",                    addName "Focus Previous monitor"             $ prevScreen)
+    , ("M-S-.",                  addName "Focused window to next workspace"   $ shiftTo Next nonNSP >> moveTo Next nonNSP)
+    , ("M-S-,",                  addName "Focused window to prev workspace"   $ shiftTo Prev nonNSP >> moveTo Prev nonNSP)
+    ]
 
-    -- Windows navigation
-      , ("M-<Space>", sendMessage NextLayout)                                       -- Rotate through the available layout algorithms
-      , ("M1-f", sendMessage (MT.Toggle NBFULL) >> sendMessage ToggleStruts)        -- Toggles full width
-      , ("M1-s", sinkAll)                                                           -- Push all windows back into tiling
-      , ("M1-S-p>", withFocused $ windows . W.sink)                                 -- Push window back into tiling
-      , ("M1-t", sendMessage (T.Toggle "floats"))                                   -- Toggles my 'floats' layout
-      , ("M-<Left>", windows W.swapMaster)                                          -- Swap the focused window and the master window
-      , ("M-<Up>", windows W.swapUp)                                                -- Swap the focused window with the previous window
-      , ("M-<Down>", windows W.swapDown)                                            -- Swap the focused window with the next window
+    ^++^ subKeys "Window size manipulations" -- Window resizing
+    [ ("M1-<Left>",              addName "Shrink horizonatal window width"    $ sendMessage Shrink)                          -- Shrink horiz window width
+    , ("M1-<Down>",              addName "Shrink vert window width"           $ sendMessage MirrorShrink)                    -- Shrink vert window width
+    , ("M1-<Up>",                addName "Expand vert window width"           $ sendMessage MirrorExpand)                    -- Expand vert window width
+    , ("M1-<Right>",             addName "Expand horiz window width"          $ sendMessage Expand)                          -- Expand horiz window width
+    , ("M-C-h",                  addName "Decrease screen spacing"            $ decScreenSpacing 4)                          -- Decrease screen spacing
+    , ("M-C-k",                  addName "Increase window spacing"            $ incWindowSpacing 4)                          -- Increase window spacing
+    , ("M-C-j",                  addName "Decrease window spacing"            $ decWindowSpacing 4)                          -- Decrease window spacing
+    , ("M-C-l",                  addName "Increase window spacing"            $ incScreenSpacing 4)                          -- Increase screen spacing
+    ]
 
-    -- Workspaces
-      , ("M-.", nextScreen)                                                         -- Switch focus to next monitor
-      , ("M-,", prevScreen)                                                         -- Switch focus to prev monitor
-      , ("M-S-.", shiftTo Next nonNSP >> moveTo Next nonNSP)                        -- Shifts focused window to next ws
-      , ("M-S-,", shiftTo Prev nonNSP >> moveTo Prev nonNSP)                        -- Shifts focused window to prev ws
-
-    -- Kill windows
-      , ("M-q", kill1)                                                              -- Quit the currently focused client
-      , ("M-S-w", killAll)                                                          -- Quit all windows on current workspace
-      , ("M-<Escape>", spawn "xkill")                                               -- Kill the currently focused client
-
-    -- Increase/decrease spacing (gaps)
-      , ("M-C-j", decWindowSpacing 4)                                               -- Decrease window spacing
-      , ("M-C-k", incWindowSpacing 4)                                               -- Increase window spacing
-      , ("M-C-h", decScreenSpacing 4)                                               -- Decrease screen spacing
-      , ("M-C-l", incScreenSpacing 4)                                               -- Increase screen spacing
-
-    -- Window resizing
-      , ("M1-<Left>", sendMessage Shrink)                                           -- Shrink horiz window width
-      , ("M1-<Right>", sendMessage Expand)                                          -- Expand horiz window width
-      , ("M1-<Down>", sendMessage MirrorShrink)                                     -- Shrink vert window width
-      , ("M1-<Up>", sendMessage MirrorExpand)                                       -- Expand vert window width
-
-    -- Brightness Display 1
-      , ("<XF86MonBrightnessUp>", spawn "xbacklight -inc 5 && ~/.config/xmonad/scripts/brightness_dunst.sh")                       -- Brightness up
-      , ("<XF86MonBrightnessDown>", spawn "xbacklight -dec 5 && ~/.config/xmonad/scripts/brightness_dunst.sh")                     -- Brightness down
+    ^++^ subKeys "Brightness"
+    [ ("<XF86MonBrightnessUp>",   addName "Brightness up"                     $ spawn "xbacklight -inc 5 && ~/.config/xmonad/scripts/brightness_dunst.sh")
+    , ("<XF86MonBrightnessDown>", addName "Broghtbess down"                   $ spawn "xbacklight -dec 5 && ~/.config/xmonad/scripts/brightness_dunst.sh")
+    ]
 
     -- Brightness Display 2
-      , ("M1-<F1>", spawn "sh $HOME/.xmonad/scripts/brightness.sh + HDMI-A-1")      -- Night Mode
-      , ("M1-<F2>", spawn "sh $HOME/.xmonad/scripts/brightness.sh - HDMI-A-1")      -- Day mode
-      , ("M1-S-<F1>", spawn "sh $HOME/.xmonad/scripts/brightness.sh = HDMI-A-1")    -- Reset redshift light
+    --  , ("M1-<F1>",             addName "Night Mode"                  $ spawn "sh $HOME/.xmonad/scripts/brightness.sh + HDMI-A-1")      -- Night Mode
+    --  , ("M1-<F2>",             addName "Day mode"                    $ spawn "sh $HOME/.xmonad/scripts/brightness.sh - HDMI-A-1")      -- Day mode
+    --  , ("M1-S-<F1>",           addName "Reset redshift light"        $ spawn "sh $HOME/.xmonad/scripts/brightness.sh = HDMI-A-1")    -- Reset redshift light
 
-    -- Scratchpad windows
-      , ("M-m", namedScratchpadAction myScratchPads "cmus")                         -- Cmus Player
-      , ("M-o", namedScratchpadAction myScratchPads "spotify")                      -- Spotify
-      , ("M-a", namedScratchpadAction myScratchPads "nautilus")                     -- Nautilus
-      , ("M-d", namedScratchpadAction myScratchPads "discord")                      -- Discord
-      , ("M-w", namedScratchpadAction myScratchPads "whatsapp-for-linux")           -- WhatsApp
-      , ("M-t", namedScratchpadAction myScratchPads "terminal")                     -- Terminal
-
-    -- KB_GROUP Emacs (SUPER-e followed by a key)
-      , ("M-e e", spawn (myEmacs))   -- emacs dashboard
-      , ("M-e b", spawn (myEmacs ++ ("--eval '(ibuffer)'")))   -- list buffers
-      , ("M-e d", spawn (myEmacs ++ ("--eval '(dired nil)'"))) -- dired
-      , ("M-e i", spawn (myEmacs ++ ("--eval '(erc)'")))       -- erc irc client
-      , ("M-e n", spawn (myEmacs ++ ("--eval '(elfeed)'")))    -- elfeed rss
-      , ("M-e s", spawn (myEmacs ++ ("--eval '(eshell)'")))    -- eshell
-      , ("M-e t", spawn (myEmacs ++ ("--eval '(mastodon)'")))  -- mastodon.el
-      , ("M-e v", spawn (myEmacs ++ ("--eval '(+vterm/here nil)'"))) -- vterm if on Doom Emacs
+    ^++^ subKeys "Scratchpads"
+    [ ("M-m",                    addName "Scratchpad cmus"                  $ namedScratchpadAction myScratchPads "cmus")                         -- Cmus Player
+    , ("M-t",                    addName "Scratchpad terminal"              $ namedScratchpadAction myScratchPads "terminal")                     -- Terminal
     ]
 
 ------------------------------------------------------------------------
--- Moving between WS
+-- Neccessary for named scratchpads
 ------------------------------------------------------------------------
       where nonNSP          = WSIs (return (\ws -> W.tag ws /= "NSP"))
             nonEmptyNonNSP  = WSIs (return (\ws -> isJust (W.stack ws) && W.tag ws /= "NSP"))
@@ -372,7 +380,7 @@ main :: IO ()
 main = do
         xmproc0 <- spawnPipe ("xmobar -x 0 ~/.xmobarrc0")
         -- xmproc1 <- spawnPipe "/usr/bin/xmobar -x 1 ~/.xmobarrc0"
-        xmonad $ ewmh def
+        xmonad $ addDescrKeys ((mod4Mask, xK_F1), showKeybindings) myKeys $ ewmh def
                 { manageHook = myManageHook <+> manageDocks
                 , handleEventHook = swallowEventHook (className =? "Alacritty" <||> className =? "XTerm") (return True)
                 , logHook = dynamicLogWithPP $ filterOutWsPP [scratchpadWorkspaceTag] $ xmobarPP
@@ -394,7 +402,8 @@ main = do
                 , startupHook        = myStartupHook
                 , normalBorderColor  = myNormColor
                 , focusedBorderColor = myFocusColor
-                } `additionalKeysP` myKeys
+                }
+                -- `additionalKeysP` myKeys
 
 -- Find app class name
 -- xprop | grep WM_CLASS

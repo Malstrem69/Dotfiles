@@ -226,7 +226,7 @@ treeselectAction a = TS.treeselectAction a
     ]
   , Node (TS.TSNode "Gaming" "" (return()))
     [ Node (TS.TSNode "Steam" "" (spawn "steam")) []
-    , Node (TS.TSNode "Lutris" "" (spawn "lutris")) []
+--    , Node (TS.TSNode "Lutris" "" (spawn "lutris")) []
     ]
   ]
 

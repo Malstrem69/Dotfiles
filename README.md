@@ -3,18 +3,30 @@
 
 ## Software
 
+# X11
 + AUR helper -> Paru 
-+ Login manager -> Ly
++ Login manager -> SDDM
 + Locker -> i3lock-solarized
 + Compositor -> picom
 + Notifications -> dunst
 + Window Manager -> Xmonad
 
+# Wayland
++ AUR helper -> Paru 
++ Login manager -> SDDM
++ Locker -> hyprlock
++ Compositor -> hyprland
++ Notifications -> dunst
++ Window Manager -> hyprland
+  
+  Hyprland setup:
+      - brightnessctl
+
 ## Settings
 
-**Graphics** -> AMD+Nvidia* \
-    - "optimus-manager" with config update to suport ly \
-    *NOTE: Optimus-manager is not supporting Ly login manager and you need to configure it by yourself. You need to update it in config script.*
-    path -> /usr/lib/python3.11/site-packages/optimus-manager/session.py \
-    find function *for cmd in* and add "systemctl restart ly.service" 
- 
+* SDDM (choosen, since works with optimus-manager and have theming option)
+Custom SDDM theme: Catppuccin Mocha
+ - Where to add theme.
+    Theme folder -> /usr/share/sddm/themes/ 
+ - How to change theme.
+    Open "/usr/lib/sddm/sddm.conf.d/default.conf" -> edit section "[Theme]" -> Current=name_theme

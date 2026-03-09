@@ -84,11 +84,13 @@ plugins=(
   zsh-navigation-tools
   nvm
   nmap
+  helm
   terraform
   colorize
   colored-man-pages
   bgnotify
   golang
+  kubectl
 )
 
 source $ZSH/oh-my-zsh.sh

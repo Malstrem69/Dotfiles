@@ -254,7 +254,7 @@ treeselectAction a = TS.treeselectAction a
   , Node (TS.TSNode "Network" "" (return ()))
     [ Node (TS.TSNode "Postman" "" (spawn "postman")) []
     , Node (TS.TSNode "Wireshark" "" (spawn "wireshark")) []
-    , Node (TS.TSNode "Fragments" "" (spawn "fragments")) []
+    , Node (TS.TSNode "Font-manager" "" (spawn "font-manager")) []
     ]
   , Node (TS.TSNode "Graphics" "" (return()))
     [ Node (TS.TSNode "Pinta" "" (spawn "pinta")) []

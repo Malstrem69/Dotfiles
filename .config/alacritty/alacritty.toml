@@ -1,6 +1,3 @@
-# alacritty.toml
-
-live_config_reload = true
 
 [env]
 TERM = "alacritty"
@@ -27,7 +24,7 @@ multiplier = 3
 
 [font]
 builtin_box_drawing = false
-size                = 8.0
+size                = 14.0
 
 [font.bold]
 family = "Ubuntu Mono"
@@ -58,7 +55,7 @@ style  = "Bold Italic"
 # foreground = "#a5a2a2"
 
 [colors.cursor]
-cursor = "CellForeground"
+cursor = "#ffffff"
 text   = "CellBackground"
 
 [colors.normal]
@@ -175,3 +172,8 @@ log_level          = "Warn"
 persistent_logging = false
 print_events       = false
 render_timer       = false
+
+[general]
+# alacritty.toml
+
+live_config_reload = true

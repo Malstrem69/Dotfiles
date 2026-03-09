@@ -11,6 +11,7 @@ Configs to be copyied:
  6. Doom emacs
  7. .zshrc
  8. Xmobar
+ 9. Nvim
 '''
 
 ########## FOLDERS ##########
@@ -23,10 +24,11 @@ alacritty_path="$conf_f/alacritty"
 dunst_path="$conf_f/dunst"
 flameshot_path="$conf_f/flameshot"
 xmonad_path="$conf_f/xmonad"
+nvim_path="$conf_f/nvim"
 
-folder_existence_array=("$doom_path" "$alacritty_path" "$DMscripts_path" "$dunst_path" "$flameshot_path" "$xmonad_path")
+folder_existence_array=("$doom_path" "$alacritty_path" "$DMscripts_path" "$dunst_path" "$flameshot_path" "$xmonad_path" "$nvim_path")
 
-folder_config_array=("$alacritty_path" "$DMscripts_path" "$dunst_path" "$flameshot_path" "$xmonad_path")
+folder_config_array=("$alacritty_path" "$DMscripts_path" "$dunst_path" "$flameshot_path" "$xmonad_path" "$nvim_path")
 folder_others_array=("$doom_path")
 
 ########## FILLES ##########

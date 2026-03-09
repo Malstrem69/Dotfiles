@@ -6,8 +6,8 @@
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
-(setq user-full-name "John Doe"
-      user-mail-address "john@doe.com")
+(setq user-full-name "K. R."
+      user-mail-address "masltrem69@gmail.com")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
@@ -62,8 +62,8 @@
 ;; - `after!' for running code after a package has loaded
 ;; - `add-load-path!' for adding directories to the `load-path', relative to
 ;;   this file. Emacs searches the `load-path' when you load packages with
-;;   `require' or `use-package'.
 ;; - `map!' for binding new keys
+;;   `require' or `use-package'.
 ;;
 ;; To get information about any of these functions/macros, move the cursor over
 ;; the highlighted symbol at press 'K' (non-evil users must press 'C-c c k').
@@ -83,7 +83,7 @@
 ;;   (interactive "nTransparency Value 0 - 100 opaque:")
 ;;   (set-frame-parameter (selected-frame) 'alpha value))
 
-(add-to-list 'default-frame-alist '(alpha . 85))
+;; (add-to-list 'default-frame-alist '(alpha . 85))
 ;; Doom Modeline settings
 ;; (setq all-the-icons-scale-factor 1.1)
 ;;(use-package doom-modeline-mode
@@ -109,3 +109,13 @@
 (custom-set-faces!
   '(font-lock-comment-face :slant italic)
   '(font-lock-keyword-face :slant italic))
+
+(drag-stuff-global-mode 1)
+(map! :n "M-<up>" #'drag-stuff-up
+      :n "M-<down>" #'drag-stuff-down
+      :v "M-<up>" #'drag-stuff-up
+      :v "M-<down>" #'drag-stuff-down
+      :n "M-<left>" #'drag-stuff-left
+      :n "M-<right>" #'drag-stuff-right
+      :v "M-<left>" #'drag-stuff-left
+      :v "M-<right>" #'drag-stuff-right)
